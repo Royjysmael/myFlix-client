@@ -1,0 +1,1 @@
+{"mappings":"AAAA;;;;;;AAMA","sources":["src/styles/index.scss"],"sourcesContent":["body {\n  background-color: #121212;\n  color: #ffffff;\n  font-family: Arial, sans-serif;\n}\n\nh1 {\n  color: #ff4081;\n}\n"],"names":[],"version":3,"file":"myFlix-client.9f367d21.css.map","sourceRoot":"/__parcel_source_root/"}

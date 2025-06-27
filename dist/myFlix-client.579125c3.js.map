@@ -1,0 +1,1 @@
+{"mappings":"AAAA,MAAM,OAAO,SAAS,cAAc,CAAC;AACrC,KAAK,SAAS,GAAG","sources":["src/index.js"],"sourcesContent":["const root = document.getElementById(\"root\");\nroot.innerHTML = \"<h1>Hello from RoyFlix!</h1>\";\n"],"names":[],"version":3,"file":"myFlix-client.579125c3.js.map","sourceRoot":"/__parcel_source_root/"}
