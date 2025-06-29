@@ -7,4 +7,21 @@ body {
 h1 {
   color: #ff4081;
 }
+
+.movie-image {
+  object-fit: cover;
+  border-radius: 8px;
+  width: 200px;
+  height: 300px;
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.movie-view-image {
+  object-fit: cover;
+  width: 300px;
+  height: 450px;
+  margin: 0 auto;
+  display: block;
+}
 /*# sourceMappingURL=myFlix-client.9f367d21.css.map */
