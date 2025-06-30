@@ -1,70 +1,34 @@
-import React, { useState } from "react";
-import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
+import React, { useState, useEffect } from "react";
+import { MovieView } from "../movie-view/movie-view"; // path depends on your structure
 
 const MainView = () => {
-  const [movies] = useState([
-    {
-      id: 1,
-      title: "The Matrix",
-      image: "https://m.media-amazon.com/images/I/51EG732BV3L._AC_.jpg",
-      author: "Lana Wachowski, Lilly Wachowski",
-      description:
-        "A hacker discovers a shocking truth about his reality and his role in the war against its controllers.",
-      genre: "Sci-Fi",
-      year: 1999,
-    },
-    {
-      id: 2,
-      title: "Pulp Fiction",
-      image: "https://m.media-amazon.com/images/I/71c05lTE03L._AC_SY679_.jpg",
-      author: "Quentin Tarantino",
-      description:
-        "A darkly comedic crime anthology told through interwoven stories of violence, redemption, and chance.",
-      genre: "Crime / Drama",
-      year: 1994,
-    },
-    {
-      id: 3,
-      title: "Fight Club",
-      image:
-        "https://i.pinimg.com/736x/28/9b/68/289b68f86fe0d0695e2fc3b22e988f70.jpg",
-      author: "David Fincher",
-      description:
-        "An insomniac office worker and a soap maker form an underground fight club with unexpected consequences.",
-      genre: "Drama / Psychological Thriller",
-      year: 1999,
-    },
-    {
-      id: 4,
-      title: "Back to the Future Part III",
-      image:
-        "https://upload.wikimedia.org/wikipedia/en/4/4e/Back_to_the_Future_Part_III.jpg",
-      author: "Robert Zemeckis",
-      description:
-        "Marty travels to the Old West to save Doc Brown, facing outlaws and time-travel challenges.",
-      genre: "Adventure / Sci-Fi / Western",
-      year: 1990,
-    },
-    {
-      id: 5,
-      title: "The Sandlot",
-      image: "https://m.media-amazon.com/images/I/91W2JLVNlsL.jpg",
-      author: "David Mickey Evans",
-      description:
-        "A boy and his new friends bond over baseball and backyard adventures in the summer of '62.",
-      genre: "Family / Sports / Comedy",
-      year: 1993,
-    },
-  ]);
-
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
+  useEffect(() => {
+    fetch("http://localhost:8080/movies")
+      .then((res) => res.json())
+      .then((data) => setMovies(data));
+  }, []);
+
   if (selectedMovie) {
+    const similarMovies = movies.filter(
+      (movie) =>
+        movie.Genre?.Name === selectedMovie.Genre?.Name &&
+        movie._id !== selectedMovie._id
+    );
+
     return (
       <MovieView
         movie={selectedMovie}
-        onBackClick={() => setSelectedMovie(null)}
+        onBackClick={(movie) => {
+          if (movie && movie.Title) {
+            setSelectedMovie(movie);
+          } else {
+            setSelectedMovie(null);
+          }
+        }}
+        similarMovies={similarMovies}
       />
     );
   }
@@ -72,16 +36,16 @@ const MainView = () => {
   return (
     <div>
       {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          onMovieClick={(newSelectedMovie) =>
-            setSelectedMovie(newSelectedMovie)
-          }
-        />
+        <div key={movie._id} onClick={() => setSelectedMovie(movie)}>
+          <h2>{movie.Title}</h2>
+          <img
+            className="movie-view-image"
+            src={movie.ImagePath}
+            alt={movie.Title}
+          />
+        </div>
       ))}
     </div>
   );
 };
-
 export default MainView;
