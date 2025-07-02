@@ -160,11 +160,11 @@
       });
     }
   }
-})({"aZE6z":[function(require,module,exports,__globalThis) {
+})({"iXQT4":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 58684;
+var HMR_SERVER_PORT = 50660;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -16136,7 +16136,7 @@ const MainView = ()=>{
             setToken(savedToken);
         }
         if (!savedToken) return;
-        fetch(`${undefined}/movies`, {
+        fetch(`${"https://myflix-api-roy-66238b883da9.herokuapp.com"}/movies`, {
             headers: {
                 Authorization: `Bearer ${savedToken}`
             }
@@ -16290,7 +16290,7 @@ const LoginView = ({ onLoggedIn })=>{
             Username: username,
             Password: password
         };
-        fetch(`${undefined}/login`, {
+        fetch(`${"https://myflix-api-roy-66238b883da9.herokuapp.com"}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -19654,9 +19654,9 @@ const SignupView = ()=>{
             Username: username,
             Password: password,
             Email: email,
-            Birthday: birthday
+            Birthday: birthday ? new Date(birthday).toISOString().split("T")[0] : undefined
         };
-        fetch(`${undefined}/users`, {
+        fetch(`${"https://myflix-api-roy-66238b883da9.herokuapp.com"}/users`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -19666,10 +19666,20 @@ const SignupView = ()=>{
             if (response.ok) {
                 alert("Signup successful");
                 window.location.reload();
-            } else response.json().then((data)=>{
-                console.error("Signup error:", data);
-                alert("Signup failed: " + (data.message || "Unknown error"));
-            });
+            } else {
+                console.log("Full response object:", response);
+                return response.text().then((text)=>{
+                    try {
+                        const data = JSON.parse(text);
+                        console.error("Signup error:", data);
+                        const errorMsg = data?.errors?.[0]?.msg || data?.message || "Unknown error";
+                        alert("Signup failed: " + errorMsg);
+                    } catch (err) {
+                        console.error("Non-JSON error response:", text);
+                        alert("Signup failed: " + text);
+                    }
+                });
+            }
         }).catch((e)=>{
             console.error("Network error:", e);
             alert("Something went wrong");
@@ -19689,18 +19699,18 @@ const SignupView = ()=>{
                         minLength: "3"
                     }, void 0, false, {
                         fileName: "src/components/signup-view/signup-view.jsx",
-                        lineNumber: 47,
+                        lineNumber: 59,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 45,
+                lineNumber: 57,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("br", {}, void 0, false, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 55,
+                lineNumber: 67,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -19713,18 +19723,18 @@ const SignupView = ()=>{
                         required: true
                     }, void 0, false, {
                         fileName: "src/components/signup-view/signup-view.jsx",
-                        lineNumber: 58,
+                        lineNumber: 70,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 56,
+                lineNumber: 68,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("br", {}, void 0, false, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 65,
+                lineNumber: 77,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -19737,18 +19747,18 @@ const SignupView = ()=>{
                         required: true
                     }, void 0, false, {
                         fileName: "src/components/signup-view/signup-view.jsx",
-                        lineNumber: 68,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 66,
+                lineNumber: 78,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("br", {}, void 0, false, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 75,
+                lineNumber: 87,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
@@ -19761,18 +19771,18 @@ const SignupView = ()=>{
                         required: true
                     }, void 0, false, {
                         fileName: "src/components/signup-view/signup-view.jsx",
-                        lineNumber: 78,
+                        lineNumber: 90,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 76,
+                lineNumber: 88,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("br", {}, void 0, false, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 85,
+                lineNumber: 97,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -19780,13 +19790,13 @@ const SignupView = ()=>{
                 children: "Submit"
             }, void 0, false, {
                 fileName: "src/components/signup-view/signup-view.jsx",
-                lineNumber: 86,
+                lineNumber: 98,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/signup-view/signup-view.jsx",
-        lineNumber: 44,
+        lineNumber: 56,
         columnNumber: 5
     }, undefined);
 };
@@ -19800,6 +19810,6 @@ $RefreshReg$(_c, "SignupView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"aSOSS":[function() {},{}]},["aZE6z","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:58684")
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"aSOSS":[function() {},{}]},["iXQT4","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:50660")
 
 //# sourceMappingURL=myFlix-client.ad93b51f.js.map

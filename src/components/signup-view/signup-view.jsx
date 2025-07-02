@@ -13,7 +13,9 @@ export const SignupView = () => {
       Username: username,
       Password: password,
       Email: email,
-      Birthday: birthday,
+      Birthday: birthday
+        ? new Date(birthday).toISOString().split("T")[0]
+        : undefined,
     };
 
     fetch(`${process.env.REACT_APP_API_URL}/users`, {
@@ -28,12 +30,22 @@ export const SignupView = () => {
           alert("Signup successful");
           window.location.reload();
         } else {
-          response.json().then((data) => {
-            console.error("Signup error:", data);
-            alert("Signup failed: " + (data.message || "Unknown error"));
+          console.log("Full response object:", response);
+          return response.text().then((text) => {
+            try {
+              const data = JSON.parse(text);
+              console.error("Signup error:", data);
+              const errorMsg =
+                data?.errors?.[0]?.msg || data?.message || "Unknown error";
+              alert("Signup failed: " + errorMsg);
+            } catch (err) {
+              console.error("Non-JSON error response:", text);
+              alert("Signup failed: " + text);
+            }
           });
         }
       })
+
       .catch((e) => {
         console.error("Network error:", e);
         alert("Something went wrong");
