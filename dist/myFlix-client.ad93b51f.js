@@ -160,11 +160,11 @@
       });
     }
   }
-})({"iXQT4":[function(require,module,exports,__globalThis) {
+})({"hiyDA":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 50660;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -16131,17 +16131,19 @@ const MainView = ()=>{
     (0, _react.useEffect)(()=>{
         const savedUser = localStorage.getItem("user");
         const savedToken = localStorage.getItem("token");
-        if (savedUser && savedToken) {
-            setUser(JSON.parse(savedUser));
-            setToken(savedToken);
-        }
-        if (!savedToken) return;
+        if (savedUser) setUser(JSON.parse(savedUser));
+        if (savedToken) setToken(savedToken);
+    }, []);
+    (0, _react.useEffect)(()=>{
+        if (!token) return;
         fetch(`${"https://myflix-api-roy-66238b883da9.herokuapp.com"}/movies`, {
             headers: {
-                Authorization: `Bearer ${savedToken}`
+                Authorization: `Bearer ${token}`
             }
         }).then((res)=>res.json()).then((data)=>setMovies(data));
-    }, []);
+    }, [
+        token
+    ]);
     if (!user) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
             className: "auth-wrapper",
@@ -16254,7 +16256,7 @@ const MainView = ()=>{
         columnNumber: 5
     }, undefined);
 };
-_s(MainView, "soisAAsSQPjSyAjxqmU7yH4l7no=");
+_s(MainView, "YbFKP7r7+hx2clwgtjDY4XifMMk=");
 _c = MainView;
 exports.default = MainView;
 var _c;
@@ -19810,6 +19812,6 @@ $RefreshReg$(_c, "SignupView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"aSOSS":[function() {},{}]},["iXQT4","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:50660")
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"aSOSS":[function() {},{}]},["hiyDA","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=myFlix-client.ad93b51f.js.map

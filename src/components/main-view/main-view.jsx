@@ -14,19 +14,19 @@ const MainView = () => {
     const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
 
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
-      setToken(savedToken);
-    }
+    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedToken) setToken(savedToken);
+  }, []);
 
-    if (!savedToken) return;
+  useEffect(() => {
+    if (!token) return;
 
     fetch(`${process.env.REACT_APP_API_URL}/movies`, {
-      headers: { Authorization: `Bearer ${savedToken}` },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setMovies(data));
-  }, []);
+  }, [token]);
 
   if (!user) {
     return (
