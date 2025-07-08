@@ -24,4 +24,18 @@ h1 {
   margin: 0 auto;
   display: block;
 }
+
+.auth-wrapper {
+  text-align: center;
+  color: #fff;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  display: flex;
+}
+
+.auth-container {
+  margin-bottom: 20px;
+}
 /*# sourceMappingURL=myFlix-client.9f367d21.css.map */
