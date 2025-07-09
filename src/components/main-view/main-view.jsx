@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { LoginView } from "../login-view/login-view";
 import { MovieView } from "../movie-view/movie-view";
 import { SignupView } from "../signup-view/signup-view";
+import { Container, Row, Col } from "react-bootstrap";
+import { MovieCard } from "../movie-card/movie-card";
+import { NavbarView } from "../navbar-view/navbar-view";
+import { Routes, Route } from "react-router-dom";
 
 const MainView = () => {
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -28,78 +30,57 @@ const MainView = () => {
       .then((data) => setMovies(data));
   }, [token]);
 
-  if (!user) {
-    return (
-      <>
-        <div className="auth-wrapper">
-          {showSignup ? (
-            <SignupView />
-          ) : (
-            <div className="auth-container">
-              <h1>Welcome to RoyFlix</h1>
-              <LoginView
-                onLoggedIn={(user, token) => {
-                  setUser(user);
-                  setToken(token);
-                  localStorage.setItem("user", JSON.stringify(user));
-                  localStorage.setItem("token", token);
-                }}
-              />
-            </div>
-          )}
-          <button onClick={() => setShowSignup(!showSignup)}>
-            {showSignup ? "Back to Login" : "Sign Up"}
-          </button>
-        </div>
-      </>
-    );
-  }
-
-  if (selectedMovie) {
-    const similarMovies = movies.filter(
-      (movie) =>
-        movie.Genre?.Name === selectedMovie.Genre?.Name &&
-        movie._id !== selectedMovie._id
-    );
-
-    return (
-      <MovieView
-        movie={selectedMovie}
-        onBackClick={(movie) => {
-          if (movie && movie.Title) {
-            setSelectedMovie(movie);
-          } else {
-            setSelectedMovie(null);
-          }
-        }}
-        similarMovies={similarMovies}
-      />
-    );
-  }
-
   return (
-    <div>
-      <button
-        onClick={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-      >
-        Logout
-      </button>
-
-      {movies.map((movie) => (
-        <div key={movie._id} onClick={() => setSelectedMovie(movie)}>
-          <h2>{movie.Title}</h2>
-          <img
-            className="movie-view-image"
-            src={movie.ImagePath}
-            alt={movie.Title}
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <LoginView
+            onLoggedIn={(user, token) => {
+              setUser(user);
+              setToken(token);
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("token", token);
+            }}
           />
-        </div>
-      ))}
-    </div>
+        }
+      />
+      <Route path="/signup" element={<SignupView />} />
+      <Route
+        path="/movies"
+        element={
+          <>
+            <NavbarView
+              onLoggedOut={() => {
+                setUser(null);
+                setToken(null);
+                localStorage.clear();
+              }}
+              user={user}
+            />
+            <Container fluid>
+              <Row className="g-4">
+                {movies.map((movie) => (
+                  <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                    <MovieCard movie={movie} />
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+          </>
+        }
+      />
+      <Route
+        path="/movies/:movieId"
+        element={
+          <MovieView
+            movies={movies}
+            onBackClick={() => window.history.back()}
+          />
+        }
+      />
+    </Routes>
   );
 };
+
 export default MainView;

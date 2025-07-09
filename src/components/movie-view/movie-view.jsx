@@ -1,10 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useParams, useNavigate } from "react-router-dom";
 
-export const MovieView = ({ movie, onBackClick, similarMovies }) => {
-  if (!movie) return <div>Loading...</div>;
+export const MovieView = ({ movies }) => {
+  const { movieId } = useParams();
+  const navigate = useNavigate();
 
-  console.log(movie);
+  const movie = movies.find((m) => m._id === movieId);
+
+  if (!movie) return <div>Movie not found.</div>;
+
+  const similarMovies = movies.filter(
+    (m) => m.Genre?.Name === movie.Genre?.Name && m._id !== movie._id
+  );
+
   return (
     <div className="movie-view">
       <h1>{movie.Title}</h1>
@@ -21,15 +30,15 @@ export const MovieView = ({ movie, onBackClick, similarMovies }) => {
         <strong>Genre:</strong> {movie.Genre?.Name}
       </p>
       <br />
-      <button onClick={onBackClick}>Back</button>
+      <button onClick={() => navigate(-1)}>Back</button>
       <hr />
       <h3>Similar Movies</h3>
       <div className="similar-movies">
-        {similarMovies && similarMovies.length > 0 ? (
+        {similarMovies.length > 0 ? (
           similarMovies.map((m) => (
             <div
               key={m._id}
-              onClick={() => onBackClick(m)}
+              onClick={() => navigate(`/movies/${m._id}`)}
               style={{ cursor: "pointer" }}
             >
               <h4>{m.Title}</h4>
@@ -45,24 +54,19 @@ export const MovieView = ({ movie, onBackClick, similarMovies }) => {
 };
 
 MovieView.propTypes = {
-  movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string.isRequired,
-    ImagePath: PropTypes.string.isRequired,
-    Genre: PropTypes.shape({
-      Name: PropTypes.string,
-      Description: PropTypes.string,
-    }),
-    Director: PropTypes.shape({
-      Name: PropTypes.string,
-    }),
-  }).isRequired,
-  onBackClick: PropTypes.func.isRequired,
-  similarMovies: PropTypes.arrayOf(
+  movies: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       Title: PropTypes.string.isRequired,
+      Description: PropTypes.string.isRequired,
       ImagePath: PropTypes.string.isRequired,
+      Genre: PropTypes.shape({
+        Name: PropTypes.string,
+        Description: PropTypes.string,
+      }),
+      Director: PropTypes.shape({
+        Name: PropTypes.string,
+      }),
     })
-  ),
+  ).isRequired,
 };
