@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, user, token }) => {
   const { movieId } = useParams();
   const navigate = useNavigate();
 
@@ -29,6 +30,28 @@ export const MovieView = ({ movies }) => {
       <p>
         <strong>Genre:</strong> {movie.Genre?.Name}
       </p>
+      {user && !user.FavoriteMovies.includes(movie._id) && (
+        <Button
+          variant="outline-success"
+          className="mt-3"
+          onClick={() => {
+            fetch(
+              `${process.env.REACT_APP_API_URL}/users/${user.Username}/movies/${movie._id}`,
+              {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            ).then((res) => {
+              if (res.ok) {
+                alert(`${movie.Title} has been added to your favorites!`);
+              }
+            });
+          }}
+        >
+          Add to Favorites
+        </Button>
+      )}
+
       <br />
       <button onClick={() => navigate(-1)}>Back</button>
       <hr />
