@@ -5,7 +5,8 @@ import { SignupView } from "../signup-view/signup-view";
 import { Container, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { NavbarView } from "../navbar-view/navbar-view";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ProfileView } from "../profile-view/profile-view";
 
 const MainView = () => {
@@ -46,10 +47,23 @@ const MainView = () => {
           />
         }
       />
-
       <Route path="/signup" element={<SignupView />} />
-
       <Route
+        path="/movies"
+        element={
+          !user ? (
+            <Navigate to="/" replace />
+          ) : (
+            <>
+              <NavbarView
+                onLoggedOut={() => {
+                  setUser(null);
+                  setToken(null);
+                  localStorage.clear();
+                }}
+                user={user}
+              />
+              <Route
         path="/movies"
         element={
           !user ? (
@@ -77,7 +91,6 @@ const MainView = () => {
           )
         }
       />
-
       <Route
         path="/profile"
         element={
@@ -97,8 +110,6 @@ const MainView = () => {
           ) : (
             <MovieView
               movies={movies}
-              user={user}
-              token={token}
               onBackClick={() => window.history.back()}
             />
           )
