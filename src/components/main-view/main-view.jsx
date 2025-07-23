@@ -6,6 +6,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { NavbarView } from "../navbar-view/navbar-view";
 import { Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { ProfileView } from "../profile-view/profile-view";
 
 const MainView = () => {
   const [movies, setMovies] = useState([]);
@@ -49,34 +51,68 @@ const MainView = () => {
       <Route
         path="/movies"
         element={
-          <>
-            <NavbarView
-              onLoggedOut={() => {
-                setUser(null);
-                setToken(null);
-                localStorage.clear();
-              }}
-              user={user}
-            />
-            <Container fluid>
-              <Row className="g-4">
-                {movies.map((movie) => (
-                  <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                    <MovieCard movie={movie} />
-                  </Col>
-                ))}
-              </Row>
-            </Container>
-          </>
+          !user ? (
+            <Navigate to="/" replace />
+          ) : (
+            <>
+              <NavbarView
+                onLoggedOut={() => {
+                  setUser(null);
+                  setToken(null);
+                  localStorage.clear();
+                }}
+                user={user}
+              />
+              <Route
+        path="/movies"
+        element={
+          !user ? (
+            <Navigate to="/" replace />
+          ) : (
+            <>
+              <NavbarView
+                onLoggedOut={() => {
+                  setUser(null);
+                  setToken(null);
+                  localStorage.clear();
+                }}
+                user={user}
+              />
+              <Container fluid>
+                <Row className="g-4">
+                  {movies.map((movie) => (
+                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                      <MovieCard movie={movie} />
+                    </Col>
+                  ))}
+                </Row>
+              </Container>
+            </>
+          )
         }
       />
       <Route
+        path="/profile"
+        element={
+          !user ? (
+            <Navigate to="/" replace />
+          ) : (
+            <ProfileView user={user} token={token} movies={movies} />
+          )
+        }
+      />
+
+      <Route
         path="/movies/:movieId"
         element={
-          <MovieView
-            movies={movies}
-            onBackClick={() => window.history.back()}
-          />
+          !user ? (
+            <Navigate to="/" replace />
+          ) : (
+            <MovieView
+              movies={movies}
+              onBackClick={() => window.history.back()}
+            />
+          )
         }
       />
     </Routes>
