@@ -26,6 +26,12 @@ const MainView = () => {
       .then((data) => setMovies(data));
   }, [token]);
 
+  // keep user on sync on any change
+  const syncUser = (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+  };
+
   return (
     <Routes>
       <Route
@@ -61,7 +67,12 @@ const MainView = () => {
                 <Row className="g-4">
                   {movies.map((movie) => (
                     <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                      <MovieCard movie={movie} />
+                      <MovieCard
+                        movie={movie}
+                        user={user}
+                        token={token}
+                        syncUser={syncUser}
+                      />
                     </Col>
                   ))}
                 </Row>
