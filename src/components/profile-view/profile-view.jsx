@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 
 export const ProfileView = ({ user, token, movies }) => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(user ? user : null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
+
   const favoriteMovies = movies.filter((movie) =>
     userData.FavoriteMovies.includes(movie._id)
   );

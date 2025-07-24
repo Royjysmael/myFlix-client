@@ -87,7 +87,17 @@ const MainView = () => {
           !user ? (
             <Navigate to="/" replace />
           ) : (
-            <ProfileView user={user} token={token} movies={movies} />
+            <>
+              <NavbarView
+                onLoggedOut={() => {
+                  setUser(null);
+                  setToken(null);
+                  localStorage.clear();
+                }}
+                user={user}
+              />
+              <ProfileView user={user} token={token} movies={movies} />
+            </>
           )
         }
       />
