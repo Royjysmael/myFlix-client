@@ -5,17 +5,17 @@ import { SignupView } from "../signup-view/signup-view";
 import { Container, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { NavbarView } from "../navbar-view/navbar-view";
-import { Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { ProfileView } from "../profile-view/profile-view";
 
 const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
 
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [user, setUser] = useState(storedUser ?? null);
+  const [token, setToken] = useState(storedToken ?? null);
   const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!token) return;
@@ -47,6 +47,7 @@ const MainView = () => {
           />
         }
       />
+
       <Route path="/signup" element={<SignupView />} />
 
       <Route
@@ -64,24 +65,42 @@ const MainView = () => {
                 }}
                 user={user}
               />
+
+              <Container className="mb-4">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search movies..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Container>
+
               <Container fluid className="pb-4">
                 <Row className="g-4">
-                  {movies.map((movie) => (
-                    <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                      <MovieCard
-                        movie={movie}
-                        user={user}
-                        token={token}
-                        syncUser={syncUser}
-                      />
-                    </Col>
-                  ))}
+                  {movies
+                    .filter((movie) =>
+                      movie.Title.toLowerCase().includes(
+                        searchTerm.toLowerCase()
+                      )
+                    )
+                    .map((movie) => (
+                      <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
+                        <MovieCard
+                          movie={movie}
+                          user={user}
+                          token={token}
+                          syncUser={syncUser}
+                        />
+                      </Col>
+                    ))}
                 </Row>
               </Container>
             </>
           )
         }
       />
+
       <Route
         path="/profile"
         element={
