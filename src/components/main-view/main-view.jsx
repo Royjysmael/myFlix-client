@@ -10,17 +10,12 @@ import { Navigate } from "react-router-dom";
 import { ProfileView } from "../profile-view/profile-view";
 
 const MainView = () => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedToken = localStorage.getItem("token");
+
+  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    const savedToken = localStorage.getItem("token");
-
-    if (savedUser) setUser(JSON.parse(savedUser));
-    if (savedToken) setToken(savedToken);
-  }, []);
 
   useEffect(() => {
     if (!token) return;
@@ -31,6 +26,11 @@ const MainView = () => {
       .then((res) => res.json())
       .then((data) => setMovies(data));
   }, [token]);
+
+  const syncUser = (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+  };
 
   return (
     <Routes>
@@ -48,6 +48,7 @@ const MainView = () => {
         }
       />
       <Route path="/signup" element={<SignupView />} />
+
       <Route
         path="/movies"
         element={
@@ -63,26 +64,16 @@ const MainView = () => {
                 }}
                 user={user}
               />
-              <Route
-        path="/movies"
-        element={
-          !user ? (
-            <Navigate to="/" replace />
-          ) : (
-            <>
-              <NavbarView
-                onLoggedOut={() => {
-                  setUser(null);
-                  setToken(null);
-                  localStorage.clear();
-                }}
-                user={user}
-              />
-              <Container fluid>
+              <Container fluid className="pb-4">
                 <Row className="g-4">
                   {movies.map((movie) => (
                     <Col key={movie._id} xs={12} sm={6} md={4} lg={3}>
-                      <MovieCard movie={movie} />
+                      <MovieCard
+                        movie={movie}
+                        user={user}
+                        token={token}
+                        syncUser={syncUser}
+                      />
                     </Col>
                   ))}
                 </Row>

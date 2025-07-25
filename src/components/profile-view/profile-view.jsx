@@ -8,9 +8,6 @@ export const ProfileView = ({ user, token, movies }) => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [birthday, setBirthday] = useState("");
-  const favoriteMovies = movies.filter((movie) =>
-    userData.FavoriteMovies.includes(movie._id)
-  );
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/users/${user.Username}`, {
@@ -26,6 +23,9 @@ export const ProfileView = ({ user, token, movies }) => {
   }, [user, token]);
 
   if (!userData) return <div>Loading profile...</div>;
+  const favoriteMovies = movies.filter((movie) =>
+    userData.FavoriteMovies.includes(movie._id)
+  );
 
   return (
     <Container>
